@@ -1,0 +1,15 @@
+URL: /
+Timestamp: Wed May 08 2024 14:19:04 GMT+0200 (Central European Summer Time)
+
+URL: /server.js
+Timestamp: Wed May 08 2024 14:19:04 GMT+0200 (Central European Summer Time)
+
+URL: /favicon.ico
+Timestamp: Wed May 08 2024 14:19:05 GMT+0200 (Central European Summer Time)
+
+URL: /documentation
+Timestamp: Wed May 08 2024 14:19:42 GMT+0200 (Central European Summer Time)
+
+URL: /favicon.ico
+Timestamp: Wed May 08 2024 14:19:43 GMT+0200 (Central European Summer Time)
+
