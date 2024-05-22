@@ -80,9 +80,27 @@ app.post('/users', (req, res) => {
 
 })
 
+//UPDATE: Allow users to update their name by id
+app.put('/users/:id', (req, res) => {
+  const { id } = req.params;
+  const updatedUser = req.body;
+
+  let user = users.find( user => user.id == id );
+
+  if (user) {
+    user.name = updatedUser.name;
+    return res.status(200).json(user);
+  } else {
+    return res.status(400).send('User not found');
+  }
+
+ 
+
+})
+
 // READ: Return a list of ALL movies
 app.get('/movies', (req, res) => {
-    res.status(200).json(movies);
+    return res.status(200).json(movies);
   });
 
 // READ: Return data about a movie
@@ -124,7 +142,7 @@ app.get('/movies/director/:directorName', (req, res) => {
 //Error handling
 app.use((err, req, res, next)=>{
     console.error(err.stack);
-    res.status(500).send('Error');
+     return res.status(500).send('Error');
 });
 
 //Listen for requests
