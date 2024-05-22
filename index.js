@@ -15,7 +15,14 @@ let users = [
     id: 2,
     name: 'Ben Cohen',
     favoriteMovies: ['Stalker']
-  }  
+  },
+  {
+    id: 3,
+    name: 'Jill Smith',
+    favoriteMovies: ['Vertigo']
+  }
+
+
 ];
 
 let movies = [
@@ -133,9 +140,8 @@ app.delete('/users/:id', (req, res) => {
   let user = users.find( user => user.id == id );
 
   if (user) {
-    users = users.filter( user => user.id != id);
-    res.json(users);
-    // return res.status(200).send(`user ${id} has been deleted`);
+    users = users.filter( user => user.id != id);    
+    return res.status(200).send(`user ${id} has been deleted`);
   } else {
     return res.status(400).send('User not found');
   }
