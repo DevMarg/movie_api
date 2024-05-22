@@ -71,6 +71,18 @@ app.get('/movies', (req, res) => {
     res.status(200).json(movies);
   });
 
+// READ: Get the single movie by title
+app.get('/movies/:title', (req, res) => {
+  const { title } = req.params;
+  const movie = movies.find( movie => movie.Title === title );
+
+  if (movie) {
+    return res.status(200).json(movie);
+  } else {
+    return res.status(400).send('Movie not found');
+  }
+});
+
 //Error handling
 app.use((err, req, res, next)=>{
     console.error(err.stack);
