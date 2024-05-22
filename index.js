@@ -93,9 +93,21 @@ app.put('/users/:id', (req, res) => {
   } else {
     return res.status(400).send('User not found');
   }
+})
 
- 
+//CREATE: Allow users to add a movie to their list of favorites
+app.post('/users/:id/:movieTitle', (req, res) => {
+  const { id, movieTitle } = req.params;
+  
 
+  let user = users.find( user => user.id == id );
+
+  if (user) {
+    user.favoriteMovies.push(movieTitle)
+    return res.status(200).send(`${movieName} has been added to user ${id}'s array`);
+  } else {
+    return res.status(400).send('User not found');
+  }
 })
 
 // READ: Return a list of ALL movies
