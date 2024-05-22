@@ -83,6 +83,18 @@ app.get('/movies/:title', (req, res) => {
   }
 });
 
+// READ: Get data about a single genre
+app.get('/movies/genre/:genreName', (req, res) => {
+  const { genreName } = req.params;
+  const genre = movies.find( movie => movie.Genre.Name === genreName ).Genre;
+
+  if (genre) {
+    return res.status(200).json(genre);
+  } else {
+    return res.status(400).send('Genre not found');
+  }
+});
+
 //Error handling
 app.use((err, req, res, next)=>{
     console.error(err.stack);
