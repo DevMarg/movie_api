@@ -9,7 +9,7 @@ let users = [
   {
     id: 1,
     name: 'Jessica Drake',
-    favoriteMovies: {}
+    favoriteMovies: []
   },
   {
     id: 2,
@@ -95,7 +95,7 @@ app.put('/users/:id', (req, res) => {
   }
 })
 
-//CREATE: Allow users to add a movie to their list of favorites
+//UPDATE: Allow users to add a movie to their list of favorites
 app.post('/users/:id/:movieTitle', (req, res) => {
   const { id, movieTitle } = req.params;
   
