@@ -65,7 +65,7 @@ app.get('/movies/:Title', async(req, res) => {
   });
 })
 
-//READ: get an info about a genre by name
+//READ: get info about a genre by name
 app.get('/movies/genre/:genreName', async (req, res) => {
   const { genreName } = req.params;
 
@@ -75,6 +75,23 @@ app.get('/movies/genre/:genreName', async (req, res) => {
         return res.status(404).send(`${genreName} was not found`);
       }
       res.status(200).json(movie.Genre);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
+});
+
+//READ: get info about a director by name
+app.get('/movies/director/:directorName', async (req, res) => { 
+  const { directorName } = req.params;
+  
+  Movies.findOne({ 'Director.Name': directorName})
+    .then((movie) => {
+      if (!movie) {
+        return res.status(404).send(`${directorName} was not found`);
+      }
+      res.status(200).json(movie.Director);
     })
     .catch((err) => {
       console.error(err);
