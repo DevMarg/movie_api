@@ -129,6 +129,23 @@ app.delete('/users/:Username/movies/:MovieID', async (req,res) => {
     });
 })
 
+//DELETE: Delete user by username
+app.delete('/users/:Username', async (req, res) => {
+  await Users.findOneAndRemove({ Username: req.params.Username})
+})
+  .then((user) => {
+    if(!user) {
+      res.status(400).send(req.params.Username + ' was not found.');
+    } else {
+      res.status(200).send(req.params.Username + ' was deleted.');
+    }    
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
+  });
+
+
 
 //Error handling
 app.use((err, req, res, next)=>{
