@@ -14,7 +14,7 @@ const app = express(),
 app.use(bodyParser.json());
 
 
-//CREATE: Add a user
+//CREATE: Create new user
 app.post('/users', async (req, res) => {
   await Users.findOne({ Username: req.body.Username})
   .then((user) => {
@@ -40,17 +40,6 @@ app.post('/users', async (req, res) => {
   });
 });
 
-//READ: Get all users
-app.get('/users', async (req, res) => {
-  await Users.find()
-  .then((users) => {
-    res.status(201).json(users);
-  })
-  .catch((err) => {
-    console.error(err);
-    res.status(500).send('Error: ' + err);
-  });
-});
 
 //READ: Get a user by username
 app.get('/users/:Username', async (req, res) => {
