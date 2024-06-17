@@ -86,6 +86,22 @@ app.put('/users/:Username', async (req,res) => {
     });
 })
 
+//UPDATE: Add a movie to user's list of favorites
+app.post('/users/:Username/movies/:MovieID', async (req,res) => {
+  await Users.findOneAndUpdate({ Username: req.params.Username},
+    {
+      $push: { FavoriteMovies: req.params.MovieID}
+    },
+    {new: true})
+    .then((updatedUser) => {
+      res.json(updatedUser);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
+})
+
 
 //Error handling
 app.use((err, req, res, next)=>{
