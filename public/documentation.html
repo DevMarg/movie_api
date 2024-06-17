@@ -27,20 +27,69 @@
     <table>
       <thead>
         <tr>
-          <th>Request</th>
-          <th>URL</th>
-          <th>HTTP Method</th>
+          <th>Method Type</th>
+          <th>Endpoint URL</th>
+          <th>Description</th>
           <th>Request body data format</th>
           <th>Response body data format</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>Return a list of ALL movies</td>
+          <td>Return a list of all movies</td>
           <td>/movies</td>
           <td>GET</td>
           <td>None</td>
           <td>A JSON array of movie objects</td>
+        </tr>
+        <tr>
+          <td>Return data about a single movie by title</td>
+          <td>/movies/:title</td>
+          <td>GET</td>
+          <td>None</td>
+          <td>
+            A JSON object holding data about a single movie. Example:
+            <code>
+              { "Title": "Vertigo", "Description": "A former San Francisco
+              police detective juggles wrestling with his personal demons and
+              becoming obsessed with the woman.", "Genre": { "Name":
+              "Thriller", "Description": "Thrillers are characterized and
+              defined by the moods they elicit, giving their audiences
+              heightened feelings of suspense." }, "Director": { "Name":
+              "Alfred Hitchcock", "Bio": "Sir Alfred Joseph Hitchcock was an
+              English film director. ", "Birth": 1899 }, "ImageURL":
+              "https://images.app.goo.gl/e8N3aDScKaMd559S6", "Featured": false
+              }
+            </code>
+          </td>
+        </tr>
+        <tr>
+          <td>Return data about a single genre by name (e.g., “Thriller”)</td>
+          <td>/movies/genre/:genreName</td>
+          <td>GET</td>
+          <td>None</td>
+          <td>
+            A JSON object holding data about a single genre. Example:
+            <code>
+              { "Name": "Comedy", "Description": "Comedy is a genre of fiction
+              that consists of discourses or works intended to be humorous or
+              amusing." }
+            </code>
+          </td>
+        </tr>
+        <tr>
+          <td>Return data about a single director by name</td>
+          <td>/movies/director/:directorName</td>
+          <td>GET</td>
+          <td>None</td>
+          <td>
+            A JSON object holding data about the director by name. Example
+            <code>
+              'Director': { 'Name':'Andrei Tarkovsky', 'Bio':'Andrei Tarkovsky
+              was a Russian film director and screenwriter.', 'Birth': 1932.0
+              }
+            </code>
+          </td>
         </tr>       
         <tr>
           <td>Allow new users to register</td>
@@ -130,7 +179,7 @@
         <tr>
           <td>Allow users to add a movie to their list of favorites</td>
           <td>/users/:Username/movies/:MovieID</td>
-          <td>POST</td>
+          <td>PATCH</td>
           <td>None</td>
           <td>
             A JSON object with updated user data including favorite movies.

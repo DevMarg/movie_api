@@ -65,7 +65,7 @@ app.get('/movies/:Title', async(req, res) => {
   });
 })
 
-//READ: get info about a genre by name
+//READ: Get info about a genre by name
 app.get('/movies/genre/:genreName', async (req, res) => {
   const { genreName } = req.params;
 
@@ -82,10 +82,10 @@ app.get('/movies/genre/:genreName', async (req, res) => {
     });
 });
 
-//READ: get info about a director by name
+//READ: Get info about a director by name
 app.get('/movies/director/:directorName', async (req, res) => { 
   const { directorName } = req.params;
-  
+
   Movies.findOne({ 'Director.Name': directorName})
     .then((movie) => {
       if (!movie) {
@@ -132,8 +132,8 @@ app.put('/users/:Username', async (req,res) => {
     });
 })
 
-//CREATE: Add a movie to user's list of favorites
-app.post('/users/:Username/movies/:MovieID', async (req,res) => {
+//UPDATE: Add a movie to user's list of favorites
+app.patch('/users/:Username/movies/:MovieID', async (req,res) => {
   await Users.findOneAndUpdate({ Username: req.params.Username},
     {
       $push: { FavoriteMovies: req.params.MovieID}
