@@ -15,6 +15,7 @@ app.use(bodyParser.json());
 
 
 //CREATE: Add a user
+
 app.post('/users', async (req, res) => {
   await Users.findOne({ Username: req.body.Username})
   .then((user) => {
@@ -63,6 +64,28 @@ app.get('/users/:Username', async (req, res) => {
     res.status(500).send('Error: ' + err);
   });
 })
+
+//UPDATE: Update user's info by username
+app.put('/users/:Username', async (req,res) => {
+  await Users.findOneAndUpdate({ Username: req.params.Username},
+    { $set: 
+      {
+        Username: req.body.Username,
+        Password: req.body.Password,
+        Email: req.body.Email,
+        Birthday: req.body.Birthday
+      }
+    },
+    { new: true})
+    .then((updatedUser) => {
+      res.json(updatedUser);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
+})
+
 
 //Error handling
 app.use((err, req, res, next)=>{
