@@ -82,18 +82,30 @@ let movies = [
 ];
 
 //CREATE: Allow new users to register
-app.post('/users', (req, res) => {
-  const newUser = req.body;
-
-  if (newUser.name) {
-    newUser.id = uuid.v4();
-    users.push(newUser);
-    res.status(201).json(newUser);
-  } else {
-    res.status(400).send('Please add name');
-  }
-
-})
+app.post('/users', async (req, res) => {
+  await Users.findOne({ Username: req.body.Username})
+  .then((user) => {
+    if (user) {
+      return res.status(400).send(req.body.Username + 'already exists');
+    } else {
+      Users.create ({
+        Username: req.body.Username,
+        Password: req.body.Password,
+        Email: req.body.Email,
+        Birthday: req.body.Birthday
+      })
+      .then((user) => {res.status(201).json(user)})
+      .catch((error) => {
+        console.error(error);
+        res.status(500).send('Error: ' + error);
+      }) 
+    }
+  })
+  .catch((error) => {
+    console.error(error);
+    res.status(500).send('Error: ' + error);
+  });
+});
 
 //UPDATE: Allow users to update their name by id
 app.put('/users/:id', (req, res) => {
