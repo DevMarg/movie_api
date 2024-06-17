@@ -113,6 +113,22 @@ app.post('/users/:Username/movies/:MovieID', async (req,res) => {
     });
 })
 
+//DELETE: Delete a movie from user's list of favorites
+app.delete('/users/:Username/movies/:MovieID', async (req,res) => {
+  await Users.findOneAndUpdate({ Username: req.params.Username},
+    {
+      $pull: { FavoriteMovies: req.params.MovieID}
+    },
+    {new: true})
+    .then((updatedUser) => {
+      res.json(updatedUser);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
+})
+
 
 //Error handling
 app.use((err, req, res, next)=>{
