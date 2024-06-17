@@ -53,6 +53,18 @@ app.get('/users/:Username', async (req, res) => {
   });
 })
 
+//READ: Get a movie by title
+app.get('/movies/:Title', async(req, res) => {
+  await Movies.findOne({ Title: req.params.Title})
+  .then((movie) => {
+    res.json(movie);
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
+  });
+})
+
 //READ: Get a list of all movies
 app.get('/movies', async (req, res) => {
   await Movies.find()
