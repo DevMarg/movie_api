@@ -26,13 +26,13 @@ This repository contains the server-side code for MyFlix, a RESTful web API for 
 ### Installation
 
 1. Clone the repository:
-    git clone <repository-url>
+    `git clone <repository-url>`
 
 2. Install dependencies:
-    npm install
+    `npm install`
 
 3. Start the server:
-    node index.js
+    `node index.js`
 *The server runs on port 8080 by default.*
 
 
