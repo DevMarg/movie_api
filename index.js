@@ -11,8 +11,12 @@ const app = express(),
   bodyParser = require('body-parser'),
   uuid = require('uuid');
 
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
+let auth = require('./auth.js')(app);
+
+const passport = require('passport');
+require('./passport.js');
 
 //CREATE: Create new user
 app.post('/users', async (req, res) => {
