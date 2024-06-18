@@ -1,10 +1,16 @@
-# Movie_API Project Overview:
+# RESTful Movie_API Project Overview
 
-The web application will provide users with access to information about different  
-movies, directors, and genres. Users will be able to sign up, update their  
-personal information, and create a list of their favorite movies.
+This repository contains the server-side code for MyFlix, a RESTful web API for accessing movie, director, and genre information, as well as managing user profiles and favorite lists.
+
+## Technologies
+
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
  
-## Features:
+## Features
+
 - Retrieve a list of all movies
 - Retrieve data about a specific movie by title
 - Retrieve data about a genre by name
@@ -15,3 +21,23 @@ personal information, and create a list of their favorite movies.
   - Add a movie to "favorites"
   - Remove a movie from "favorites"
   - User deregistration
+
+
+### Installation
+
+1. Clone the repository:
+    git clone <repository-url>
+
+2. Install dependencies:
+    npm install
+
+3. Start the server:
+    node index.js
+*The server runs on port 8080 by default.*
+
+
+### API Documentation
+
+Refer to documentation.html for detailed API documentation.
+
+
