@@ -43,7 +43,7 @@ passport.use(
       secretOrKey: "your_jwt_secret",
     },
     async (jwtPayload, callback) => {
-      return await User.findByID(jwtPayload._id)
+      return await Users.findByiD(jwtPayload._id)
         .then((user) => {
           return callback(null, user);
         })
