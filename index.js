@@ -12,6 +12,7 @@ const app = express(),
   uuid = require('uuid');
 
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
 
 let auth = require('./auth.js')(app);
 
