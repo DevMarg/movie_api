@@ -141,7 +141,7 @@ app.put('/users/:Username', passport.authenticate('jwt', { session: false }), as
 })
 
 //UPDATE: Add a movie to user's list of favorites
-app.patch('/users/:Username/movies/:MovieID',passport.authenticate('jwt', { session: false }), async (req,res) => {
+app.patch('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { session: false }), async (req,res) => {
   if(req.user.Username !== req.params.Username) {
     return res.status(400).send('Permission denied');
   } 
@@ -160,7 +160,10 @@ app.patch('/users/:Username/movies/:MovieID',passport.authenticate('jwt', { sess
 })
 
 //DELETE: Delete a movie from user's list of favorites
-app.delete('/users/:Username/movies/:MovieID', async (req,res) => {
+app.delete('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { session: false }), async (req,res) => {
+  if(req.user.Username !== req.params.Username) {
+    return res.status(400).send('Permission denied');
+  } 
   await Users.findOneAndUpdate({ Username: req.params.Username},
     {
       $pull: { FavoriteMovies: req.params.MovieID}
