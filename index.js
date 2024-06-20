@@ -47,7 +47,7 @@ app.post('/users', async (req, res) => {
 
 
 //READ: Get a user by username
-app.get('/users/:Username', async (req, res) => {
+app.get('/users/:Username', passport.authenticate('jwt', { session: false}), async (req, res) => {
   await Users.findOne({ Username: req.params.Username})
   .then((user) => {
     res.json(user);
