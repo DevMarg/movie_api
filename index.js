@@ -88,7 +88,7 @@ app.get('/movies/genre/:genreName', passport.authenticate('jwt', { session: fals
 });
 
 //READ: Get info about a director by name
-app.get('/movies/director/:directorName', async (req, res) => { 
+app.get('/movies/director/:directorName', passport.authenticate('jwt', { session: false}), async (req, res) => { 
   const { directorName } = req.params;
 
   Movies.findOne({ 'Director.Name': directorName})
