@@ -59,7 +59,7 @@ app.get('/users/:Username', passport.authenticate('jwt', { session: false}), asy
 })
 
 //READ: Get a movie by title
-app.get('/movies/:Title',passport.authenticate('jwt', { session: false}), async(req, res) => {
+app.get('/movies/:Title', passport.authenticate('jwt', { session: false}), async(req, res) => {
   await Movies.findOne({ Title: req.params.Title})
   .then((movie) => {
     res.json(movie);
@@ -71,7 +71,7 @@ app.get('/movies/:Title',passport.authenticate('jwt', { session: false}), async(
 })
 
 //READ: Get info about a genre by name
-app.get('/movies/genre/:genreName', async (req, res) => {
+app.get('/movies/genre/:genreName', passport.authenticate('jwt', { session: false}), async (req, res) => {
   const { genreName } = req.params;
 
   Movies.findOne({ 'Genre.Name': genreName })
