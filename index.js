@@ -1,23 +1,35 @@
-const mongoose = require('mongoose');
-const Models = require('./models.js');
+// Importing necessary modules
+const mongoose = require('mongoose'); // Mongoose for MongoDB interaction
+const Models = require('./models.js'); // Importing data models
 
+// Structuring Models for easy access
 const Movies = Models.Movie;
 const Users = Models.User;
 
+// Connecting to the MongoDB database
 mongoose.connect('mongodb://localhost:27017/cfDB', { useNewUrlParser: true, useUnifiedTopology: true });
 
-const express = require('express')
+const express = require('express') // Express framework for building web applications
 const app = express(),
-  bodyParser = require('body-parser'),
-  uuid = require('uuid');
+  bodyParser = require('body-parser'), // Body-parser to parse incoming request bodies
+  uuid = require('uuid'); // UUID for generating unique identifiers
 
+// Middleware to parse URL-encoded bodies (for form submissions)
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Middleware to parse JSON bodies (for API requests)
 app.use(express.json());
 
-let auth = require('./auth.js')(app);
+const cors = require('cors'); // CORS for handling cross-origin requests
 
-const passport = require('passport');
-require('./passport.js');
+// Enable CORS for all routes
+app.use(cors());
+
+// Authentication and authorization setup
+let auth = require('./auth.js')(app); // Import and use authentication middleware
+
+const passport = require('passport'); // Passport for handling authentication
+require('./passport.js'); // Passport configuration
 
 //CREATE: Create new user
 app.post('/users', async (req, res) => {
@@ -198,14 +210,13 @@ app.delete('/users/:Username', passport.authenticate('jwt', { session: false }),
 });
 
 
-
 //Error handling
 app.use((err, req, res, next)=>{
     console.error(err.stack);
      return res.status(500).send('Error');
 });
 
-//Listen for requests
+//Listen for requests (start the server)
 app.listen(8080, () => {
     console.log('Your app is listening on port 8080');
 });
