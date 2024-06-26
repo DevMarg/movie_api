@@ -2,7 +2,7 @@
 const mongoose = require('mongoose'); // Mongoose for MongoDB interaction
 const Models = require('./models.js'); // Importing data models
 
-// Structuring Models for easy access
+// Destructuring Models for easy access
 const Movies = Models.Movie;
 const Users = Models.User;
 
@@ -10,6 +10,7 @@ const Users = Models.User;
 mongoose.connect('mongodb://localhost:27017/cfDB', { useNewUrlParser: true, useUnifiedTopology: true });
 
 const express = require('express') // Express framework for building web applications
+
 const app = express(),
   bodyParser = require('body-parser'), // Body-parser to parse incoming request bodies
   uuid = require('uuid'); // UUID for generating unique identifiers
@@ -22,8 +23,19 @@ app.use(express.json());
 
 const cors = require('cors'); // CORS for handling cross-origin requests
 
-// Enable CORS for all routes
-app.use(cors());
+let allowedOrigins = ['http://localhost:8080', 'http://testsite.com']; // Testsite.com is a placeholder for future front-end domain
+
+// Enable CORS only for allowed origins
+app.use(cors({
+  origin: (origin, callback) => {
+    if(!origin) return callback(null, true);
+    if(allowedOrigins.indexOf(origin) === -1){
+      let message = 'The CORS guidelines for this application does not allow access from origin' + origin;
+      return callback(new Error(message), false);
+    }
+    return callback(null, true);
+  }
+}));
 
 // Authentication and authorization setup
 let auth = require('./auth.js')(app); // Import and use authentication middleware
