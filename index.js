@@ -45,6 +45,7 @@ require('./passport.js'); // Passport configuration
 
 //CREATE: Create new user
 app.post('/users', async (req, res) => {
+  let hashedPassword = Users.hashPassword(req.body.Password);
   await Users.findOne({ Username: req.body.Username})
   .then((user) => {
     if (user) {
@@ -52,7 +53,7 @@ app.post('/users', async (req, res) => {
     } else {
       Users.create ({
         Username: req.body.Username,
-        Password: req.body.Password,
+        Password: hashedPassword,
         Email: req.body.Email,
         Birthday: req.body.Birthday
       })
