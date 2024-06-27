@@ -48,11 +48,27 @@ require('./passport.js'); // Passport configuration
 
 //CREATE: Create new user
 app.post('/users',[
-  check('Username', 'Username is required').isLength({min: 5}),
-  check('Username', 'Username should only contain alphanumeric characters').isAlphanumeric(),
-  check('Password', 'Password is required').not().isEmpty(),
-  check('Email', 'Email is not valid').isEmail()
+
+  // Validation logic for request
+  check('Username', 'Username must be at least 5 characters long.').isLength({min: 5}),
+  check('Username', 'Username should only contain letters and numbers.').isAlphanumeric(),
+  check('Password', 'Password is required.').not().isEmpty(),
+  check('Password', 'Password must be at least 8 characters long.').isLength({min: 8}),
+  check('Email', 'Email is required').not().isEmpty(),
+  check('Email', 'Please enter a valid email address.').isEmail(),
+  check('Birthday', 'Birthday date is required').not().isEmpty(),
+  check('Birthday', 'Birthday must be in DD/MM/YYYY format.').isDate({format: 'DD/MM/YYYY', strictMode: true, delimiters: ['/'] })
+  
+
 ], async (req, res) => {
+
+  // Check the validation objects for errors
+  let errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ error: errors.array() });
+  }
+
   let hashedPassword = Users.hashPassword(req.body.Password);
   await Users.findOne({ Username: req.body.Username})
   .then((user) => {
