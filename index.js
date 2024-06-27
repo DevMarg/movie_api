@@ -15,6 +15,9 @@ const app = express(),
   bodyParser = require('body-parser'), // Body-parser to parse incoming request bodies
   uuid = require('uuid'); // UUID for generating unique identifiers
 
+// Express-validator for request validation
+const { check, validationResult } = require('express-validator');
+
 // Middleware to parse URL-encoded bodies (for form submissions)
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -44,7 +47,12 @@ const passport = require('passport'); // Passport for handling authentication
 require('./passport.js'); // Passport configuration
 
 //CREATE: Create new user
-app.post('/users', async (req, res) => {
+app.post('/users',[
+  check('Username', 'Username is required').isLength({min: 5}),
+  check('Username', 'Username should only contain alphanumeric characters').isAlphanumeric(),
+  check('Password', 'Password is required').not().isEmpty(),
+  check('Email', 'Email is not valid').isEmail()
+], async (req, res) => {
   let hashedPassword = Users.hashPassword(req.body.Password);
   await Users.findOne({ Username: req.body.Username})
   .then((user) => {
