@@ -162,15 +162,21 @@ app.post('/users',[
     if (req.user.Username !== req.params.Username) {
         return res.status(403).send('Permission denied');
     }
-    await Users.findOneAndUpdate({ Username: req.params.Username},
-      { $set: 
-        {
-          Username: req.body.Username,
-          Password: req.body.Password,
-          Email: req.body.Email,
-          Birthday: req.body.Birthday
-        }
-      },
+
+    let updatedFields = {
+      Username: req.body.Username,
+      Email: req.body.Email,
+      Birthday: req.body.Birthday
+    };
+
+    // If password is provided, hash it before updating
+    if (req.body.Password) {
+      updatedFields.Password = Users.hashPassword(req.body.Password);
+    }
+  
+    await Users.findOneAndUpdate(
+      { Username: req.params.Username},
+      { $set: updatedFields},
       { new: true})
       .then((updatedUser) => {
         res.json(updatedUser);
