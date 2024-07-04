@@ -33,7 +33,7 @@ This repository contains the server-side code for MyFlix, a RESTful web API for 
 
 3. Start the server:
     `node index.js`
-*The server runs on port 8080 by default.*
+
 
 
 ### API Documentation

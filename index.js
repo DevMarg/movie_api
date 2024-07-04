@@ -25,6 +25,10 @@ app.use(cors());
 
 let auth = require('./auth.js')(app);
 
+app.get('/', (req, res) => {
+  res.send('Welcome to Movie Spot API');
+});
+
 //CREATE: Create new user
 app.post('/users',[
 
