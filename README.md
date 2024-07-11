@@ -39,21 +39,8 @@ This is a RESTful API for managing a movie database. It provides endpoints for a
 
 1. Create a `.env` file in the root directory and add your MongoDB connection string.
 
-    \`\`\`sh
-   CONNECTION_URI=mongodb+srv://<username>:<password>@<clusterName>.mongodb.net/<dataBaseName>?retryWrites=true&w=majority&<appName>
-   \`\`\`
-
-   
-
-   How to Find Your Cluster URL:
-
-   - Log in to your MongoDB Atlas account.
-   - Navigate to your Cluster.
-   - Click on the "Connect" button.
-   - Copy the connection string provided.
-   - Ensure that your connection string includes the correct username, password, cluster URL, and database name.
-
-   For detailed instructions on managing your MongoDB connection string, refer to [MongoDB Atlas Documentation](https://www.mongodb.com/docs/atlas/troubleshoot-connection/#special-characters-in-connection-string-password).
+   ```sh
+   CONNECTION_URI=mongodb+srv://<username>:<password>@<clusterName>.mongodb.net/<dataBaseName>?retryWrites=true&w=majority&<appName>   
 
 2. Add a port to your `.env` file:  
 
