@@ -37,10 +37,13 @@ This is a RESTful API for managing a movie database. It provides endpoints for a
    ```
  ### Local Development
 
-1. Create a `.env` file in the root directory and add your MongoDB connection string:
+1. Create a `.env` file in the root directory and add your MongoDB connection string.
 
-   ```sh
+    \`\`\`sh
    CONNECTION_URI=mongodb+srv://<username>:<password>@<clusterName>.mongodb.net/<dataBaseName>?retryWrites=true&w=majority&<appName>
+   \`\`\`
+
+   
 
    How to Find Your Cluster URL:
 
@@ -84,7 +87,7 @@ If you are deploying your application directly to Heroku and have configured you
 
 For detailed instructions on managing your MongoDB connection string, refer to [MongoDB Atlas Documentation](https://www.mongodb.com/docs/atlas/troubleshoot-connection/#special-characters-in-connection-string-password).
 
-### Endpoints
+## Endpoints
 
 Please refer to the documentation file for detailed information about the available endpoints.
 
