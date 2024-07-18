@@ -13,6 +13,7 @@ const passport = require('passport');
 require('./passport.js');  
 
 const { check, validationResult } = require('express-validator');
+const moment = require('moment');
 
 // mongoose.connect('mongodb://localhost:27017/cfDB', { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -40,15 +41,23 @@ app.post('/users',[
     check('Email', 'Email is required').not().isEmpty(),
     check('Email', 'Please enter a valid email address.').isEmail(),
     check('Birthday', 'Birthday date is required').not().isEmpty(),
-    check('Birthday', 'Birthday must be in DD/MM/YYYY format.').isDate({format: 'DD/MM/YYYY', strictMode: true, delimiters: ['/'] })    
+    check('Birthday', 'Birthday must be in DD/MM/YYYY format.').matches(/^\d{2}\/\d{2}\/\d{4}$/)   
     ], async (req, res) => {
   
     // Check the validation objects for errors
     let errors = validationResult(req);
   
     if (!errors.isEmpty()) {
-      return res.status(422).json({ error: errors.array() });
+      return res.status(422).json({ error: errors.array()});
     }
+
+    // Parse and validate the date
+    const birthday = moment(req.body.Birthday, 'DD/MM/YYYY', true);
+    if (!birthday.isValid()) {
+      console.log('Invalid date format:', req.body.Birthday);
+      return res.status(422).json({ error: [{ msg: 'Invalid date format for Birthday'}]});
+    }
+    console.log('Parsed Birthday:', birthday.toDate());
   
     let hashedPassword = Users.hashPassword(req.body.Password);
     await Users.findOne({ Username: req.body.Username})
@@ -157,7 +166,7 @@ app.post('/users',[
     check('Email', 'Email is required').not().isEmpty(),
     check('Email', 'Please enter a valid email address.').isEmail(),
     check('Birthday', 'Birthday date is required').not().isEmpty(),
-    check('Birthday', 'Birthday must be in DD/MM/YYYY format.').isDate({format: 'DD/MM/YYYY', strictMode: true, delimiters: ['/'] })
+    check('Birthday', 'Birthday must be in DD/MM/YYYY format.').matches(/^\d{2}\/\d{2}\/\d{4}$/)
     ], passport.authenticate('jwt', { session: false }), async (req,res) => {
 
     // Check the validation objects for errors
@@ -173,7 +182,7 @@ app.post('/users',[
     let updatedFields = {
       Username: req.body.Username,
       Email: req.body.Email,
-      Birthday: req.body.Birthday
+      Birthday: moment(req.body.Birthday, 'DD/MM/YYYY', true).toDate()
     };
 
     // If password is provided, hash it before updating
