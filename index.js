@@ -34,7 +34,7 @@ app.get('/', (req, res) => {
 
 //Route to documentation page
 app.get('/documentation', (req, res) => {
-  res.sendFile(path.join(movie_api, 'public/documentation.html'));
+  res.sendFile(path.join(__dirname, 'public/documentation.html'));
 });
 
 
