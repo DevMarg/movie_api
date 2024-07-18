@@ -1,234 +1,225 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Documentation</title>
-  <style>
-    table,
-    th,
-    td {
-      margin: 10px;
-      padding: 10px;
-      border: 1px solid;
-    }
-  </style>
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Documentation</title>
+    <style>
+      table,
+      th,
+      td {
+        margin: 10px;
+        padding: 10px;
+        border: 1px solid;
+      }
+    </style>
+  </head>
 
-<body>
-  <header>
-    <h1>
-      Documentation for the server-side component of a “movies” web application.
-    </h1>
-  </header>
+  <body>
+    <header>
+      <h1>
+        Documentation for the server-side component of a “movie_api” web
+        application.
+      </h1>
+    </header>
 
-  <main>
-    
-    <table>
-      <thead>
-        <tr>
-          <th>Method Type</th>
-          <th>Endpoint URL</th>
-          <th>Description</th>
-          <th>Request body data format</th>
-          <th>Response body data format</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Return a list of all movies</td>
-          <td>/movies</td>
-          <td>GET</td>
-          <td>None</td>
-          <td>A JSON array of movie objects</td>
-        </tr>
-        <tr>
-          <td>Return data about a single movie by title</td>
-          <td>/movies/:title</td>
-          <td>GET</td>
-          <td>None</td>
-          <td>
-            A JSON object holding data about a single movie. Example:
-            <code>
-              { "Title": "Vertigo", "Description": "A former San Francisco
-              police detective juggles wrestling with his personal demons and
-              becoming obsessed with the woman.", "Genre": { "Name":
-              "Thriller", "Description": "Thrillers are characterized and
-              defined by the moods they elicit, giving their audiences
-              heightened feelings of suspense." }, "Director": { "Name":
-              "Alfred Hitchcock", "Bio": "Sir Alfred Joseph Hitchcock was an
-              English film director. ", "Birth": 1899 }, "ImageURL":
-              "https://images.app.goo.gl/e8N3aDScKaMd559S6", "Featured": false
+    <main>
+      <table>
+        <thead>
+          <tr>
+            <th>Method Type</th>
+            <th>Endpoint URL</th>
+            <th>Description</th>
+            <th>Request body data format</th>
+            <th>Response body data format</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Authenticate and login a user</td>
+            <td>/login</td>
+            <td>POST</td>
+            <td>
+              A JSON object with user credentials. Example:
+              <code>
+                {
+                  "Username" : "test",
+                  "Password" : "test11111",
+                  "Email" : "test@gmail.com",
+                  "Birthday" : "18/04/1986"
               }
-            </code>
-          </td>
-        </tr>
-        <tr>
-          <td>Return data about a single genre by name (e.g., “Thriller”)</td>
-          <td>/movies/genre/:genreName</td>
-          <td>GET</td>
-          <td>None</td>
-          <td>
-            A JSON object holding data about a single genre. Example:
-            <code>
-              { "Name": "Comedy", "Description": "Comedy is a genre of fiction
-              that consists of discourses or works intended to be humorous or
-              amusing." }
-            </code>
-          </td>
-        </tr>
-        <tr>
-          <td>Return data about a single director by name</td>
-          <td>/movies/director/:directorName</td>
-          <td>GET</td>
-          <td>None</td>
-          <td>
-            A JSON object holding data about the director by name. Example
-            <code>
-              'Director': { 'Name':'Andrei Tarkovsky', 'Bio':'Andrei Tarkovsky
-              was a Russian film director and screenwriter.', 'Birth': 1932.0
+              </code>
+            </td>
+            <td>
+              A JSON object with user details.
+              Example:
+              <code>
+                {
+                  "Username": "test",
+                  "Password": "$2b$10$dbV7YhLtgPXMguWPEDtozOEWf33/hTcvBDQQyP7u3SqXbWyA4riza",
+                  "Email": "test@gmail.com",
+                  "Birthday": "1986-04-18T00:00:00.000Z",
+                  "FavoriteMovies": [],
+                  "_id": "669912036f4b1d5ded1ab04a",
+                  "__v": 0
               }
-            </code>
-          </td>
-        </tr>       
-        <tr>
-          <td>Allow new users to register</td>
-          <td>/users</td>
-          <td>POST</td>
-          <td>
-            A JSON object with user details.
-            Example:
-            <code>
-              {
-                "Username" : "testuser1",
-                "Password" : "password1",
-                "Email" : "testuser1@gmail.com",
-                "Birthday" : "10/10/1990"
-            }
-            </code>
-          </td>
-          <td>
-            A JSON object with user details including UUID.
-            Example:
-            <code>
-              {
-                "Username": "testuser1",
-                "Password": "password1",
-                "Email": "testuser1@gmail.com",
-                "Birthday": "1990-10-09T23:00:00.000Z",
-                "FavoriteMovies": [],
-                "_id": "6670390ffb6f33d439ee8bb8",
-                "__v": 0
-            }
-            </code>
-          </td>
-        </tr>
-        <tr>
-          <td>Return user info by username</td>
-          <td>/users/:Username</td>
-          <td>GET</td>
-          <td>None</td>
-          <td>
-            A JSON object with user details including UUID.
-            Example:
-            <code>
-              {
-                "_id": "6670390ffb6f33d439ee8bb8",
-                "Username": "testuser1",
-                "Password": "password1",
-                "Email": "testuser1@gmail.com",
-                "Birthday": "1990-10-09T23:00:00.000Z",
-                "FavoriteMovies": [],
-                "__v": 0
-            }
-            </code>
-          </td>
-        </tr>
-        <tr>
-          <td>Allow users to update their information by username</td>
-          <td>/users/:Username</td>
-          <td>PUT</td>
-          <td>
-            A JSON object with new user information.
-            Example:
-            <code>
-              {
-                "Username" : "updtestuser1",
-                "Password" : "updpassword1",
-                "Email" : "updtestuser1@gmail.com",
-                "Birthday" : "10/10/1990"
-            }
-            </code>
-          </td>
-          <td>
-            A JSON object with updated user information.
-            Example:
-            <code>
-              {
-                "_id": "6670390ffb6f33d439ee8bb8",
-                "Username": "updtestuser1",
-                "Password": "updpassword1",
-                "Email": "updtestuser1@gmail.com",
-                "Birthday": "1990-10-09T23:00:00.000Z",
-                "FavoriteMovies": [],
-                "__v": 0
-            }
-            </code>
-          </td>
-        </tr>
-        <tr>
-          <td>Allow users to add a movie to their list of favorites</td>
-          <td>/users/:Username/movies/:MovieID</td>
-          <td>PATCH</td>
-          <td>None</td>
-          <td>
-            A JSON object with updated user data including favorite movies.
-            Example:
-            <code>
-              {
-                "_id": "6670390ffb6f33d439ee8bb8",
-                "Username": "updtestuser1",
-                "Password": "updpassword1",
-                "Email": "updtestuser1@gmail.com",
-                "Birthday": "1990-10-09T23:00:00.000Z",
-                "FavoriteMovies": [
-                    "665db63e036f555077cdcdf6"
-                ],
-                "__v": 0
-            }
-            </code>
-          </td>
-        </tr>
-        <tr>
-          <td>Allow users to remove a movie from their list of favorites</td>
-          <td>/users/:Username/movies/:MovieID</td>
-          <td>DELETE</td>
-          <td>None</td>
-          <td>
-            A JSON object with updated user data after removing the movie.
-            Example:
-            <code>
-              {
-                "_id": "6670390ffb6f33d439ee8bb8",
-                "Username": "updtestuser1",
-                "Password": "updpassword1",
-                "Email": "updtestuser1@gmail.com",
-                "Birthday": "1990-10-09T23:00:00.000Z",
-                "FavoriteMovies": [],
-                "__v": 0
-            }
-            </code>
-          </td>
-        </tr>
-        <tr>
-          <td>Delete a user by username</td>
-          <td>/users/:Username</td>
-          <td>DELETE</td>
-          <td>None</td>
-          <td>A text message indicating success or failure</td>
-        </tr>
-      </tbody>
-    </table>
-  </main>
-</body>
+              </code>
+            </td>
+          </tr>
+          <tr>
+            <td>Return a list of all movies</td>
+            <td>/movies</td>
+            <td>GET</td>
+            <td>None</td>
+            <td>A JSON array of movie objects</td>
+          </tr>
+          <tr>
+            <td>Return data about a single movie by title</td>
+            <td>/movies/:title</td>
+            <td>GET</td>
+            <td>None</td>
+            <td>
+              A JSON object holding data about a single movie. Example:
+              <code>
+                { "Title": "Vertigo", "Description": "A former San Francisco
+                police detective juggles wrestling with his personal demons and
+                becoming obsessed with the woman.", "Genre": { "Name":
+                "Thriller", "Description": "Thrillers are characterized and
+                defined by the moods they elicit, giving their audiences
+                heightened feelings of suspense." }, "Director": { "Name":
+                "Alfred Hitchcock", "Bio": "Sir Alfred Joseph Hitchcock was an
+                English film director. ", "Birth": 1899 }, "ImageURL":
+                "https://images.app.goo.gl/e8N3aDScKaMd559S6", "Featured": false
+                }
+              </code>
+            </td>
+          </tr>
+          <tr>
+            <td>Return data about a single genre by name (e.g., “Thriller”)</td>
+            <td>/movies/genre/:genreName</td>
+            <td>GET</td>
+            <td>None</td>
+            <td>
+              A JSON object holding data about a single genre. Example:
+              <code>
+                { "Name": "Comedy", "Description": "Comedy is a genre of fiction
+                that consists of discourses or works intended to be humorous or
+                amusing." }
+              </code>
+            </td>
+          </tr>
+          <tr>
+            <td>Return data about a single director by name</td>
+            <td>/movies/director/:directorName</td>
+            <td>GET</td>
+            <td>None</td>
+            <td>
+              A JSON object holding data about the director by name. Example
+              <code>
+                'Director': { 'Name':'Andrei Tarkovsky', 'Bio':'Andrei Tarkovsky
+                was a Russian film director and screenwriter.', 'Birth': 1932.0
+                }
+              </code>
+            </td>
+          </tr>
+          <tr>
+            <td>Allow new users to register</td>
+            <td>/users</td>
+            <td>POST</td>
+            <td>
+              A JSON object with user details. Example:
+              <code>
+                { "Username" : "testuser1", "Password" : "password1", "Email" :
+                "testuser1@gmail.com", "Birthday" : "10/10/1990" }
+              </code>
+            </td>
+            <td>
+              A JSON object with user details including UUID. Example:
+              <code>
+                { "Username": "testuser1", "Password": "password1", "Email":
+                "testuser1@gmail.com", "Birthday": "1990-10-09T23:00:00.000Z",
+                "FavoriteMovies": [], "_id": "6670390ffb6f33d439ee8bb8", "__v":
+                0 }
+              </code>
+            </td>
+          </tr>
+          <tr>
+            <td>Return user info by username</td>
+            <td>/users/:Username</td>
+            <td>GET</td>
+            <td>None</td>
+            <td>
+              A JSON object with user details including UUID. Example:
+              <code>
+                { "_id": "6670390ffb6f33d439ee8bb8", "Username": "testuser1",
+                "Password": "password1", "Email": "testuser1@gmail.com",
+                "Birthday": "1990-10-09T23:00:00.000Z", "FavoriteMovies": [],
+                "__v": 0 }
+              </code>
+            </td>
+          </tr>
+          <tr>
+            <td>Allow users to update their information by username</td>
+            <td>/users/:Username</td>
+            <td>PUT</td>
+            <td>
+              A JSON object with new user information. Example:
+              <code>
+                { "Username" : "updtestuser1", "Password" : "updpassword1",
+                "Email" : "updtestuser1@gmail.com", "Birthday" : "10/10/1990" }
+              </code>
+            </td>
+            <td>
+              A JSON object with updated user information. Example:
+              <code>
+                { "_id": "6670390ffb6f33d439ee8bb8", "Username": "updtestuser1",
+                "Password": "updpassword1", "Email": "updtestuser1@gmail.com",
+                "Birthday": "1990-10-09T23:00:00.000Z", "FavoriteMovies": [],
+                "__v": 0 }
+              </code>
+            </td>
+          </tr>
+          <tr>
+            <td>Allow users to add a movie to their list of favorites</td>
+            <td>/users/:Username/movies/:MovieID</td>
+            <td>PATCH</td>
+            <td>None</td>
+            <td>
+              A JSON object with updated user data including favorite movies.
+              Example:
+              <code>
+                { "_id": "6670390ffb6f33d439ee8bb8", "Username": "updtestuser1",
+                "Password": "updpassword1", "Email": "updtestuser1@gmail.com",
+                "Birthday": "1990-10-09T23:00:00.000Z", "FavoriteMovies": [
+                "665db63e036f555077cdcdf6" ], "__v": 0 }
+              </code>
+            </td>
+          </tr>
+          <tr>
+            <td>Allow users to remove a movie from their list of favorites</td>
+            <td>/users/:Username/movies/:MovieID</td>
+            <td>DELETE</td>
+            <td>None</td>
+            <td>
+              A JSON object with updated user data after removing the movie.
+              Example:
+              <code>
+                { "_id": "6670390ffb6f33d439ee8bb8", "Username": "updtestuser1",
+                "Password": "updpassword1", "Email": "updtestuser1@gmail.com",
+                "Birthday": "1990-10-09T23:00:00.000Z", "FavoriteMovies": [],
+                "__v": 0 }
+              </code>
+            </td>
+          </tr>
+          <tr>
+            <td>Delete a user by username</td>
+            <td>/users/:Username</td>
+            <td>DELETE</td>
+            <td>None</td>
+            <td>A text message indicating success or failure</td>
+          </tr>
+        </tbody>
+      </table>
+    </main>
+  </body>
 </html>
