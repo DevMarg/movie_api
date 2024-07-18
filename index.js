@@ -69,7 +69,7 @@ app.post('/users',[
           Username: req.body.Username,
           Password: hashedPassword,
           Email: req.body.Email,
-          Birthday: req.body.Birthday
+          Birthday: birthday.toDate()
         })
         .then((user) => {res.status(201).json(user)})
         .catch((error) => {
