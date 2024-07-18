@@ -22,6 +22,7 @@ mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifie
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.static('public'));
 app.use(cors());
 
 let auth = require('./auth.js')(app);
@@ -29,6 +30,12 @@ let auth = require('./auth.js')(app);
 app.get('/', (req, res) => {
   res.send('Welcome to Movie Spot API');
 });
+
+//Route to documentation page
+app.get('/documentation', (req, res) => {
+  res.sendFile(path.join(movie_api, 'public/documentation.html'));
+});
+
 
 //CREATE: Create new user
 app.post('/users',[
