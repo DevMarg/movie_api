@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const express = require('express');
-const cors = require('cors'); 
+const cors = require('cors');
+const crypto = require('crypto');
 
 const Models = require('./models.js');
 const Movies = Models.Movie;
@@ -20,6 +21,12 @@ const path = require('path');
 
 mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
+app.use((req, res, next) => {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate'); 
+  res.set('Pragma', 'no-cache'); 
+  res.set('Expires', '0'); 
+  next();
+})
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
@@ -30,7 +37,7 @@ let allowedOrigins = ['http://localhost:8080', 'http://testsite.com', 'http://lo
 app.use(cors({
  origin: (origin, callback) => {
    if(!origin) return callback(null, true);
-   if(allowedOrigins.indexOf(origin) === -1){ // If a specific origin isn’t found on the list of allowed origins
+   if(allowedOrigins.indexOf(origin) === -1){ 
      let message = 'The CORS policy for this application doesn’t allow access from origin ' + origin;
      return callback(new Error(message ), false);
    }
@@ -44,7 +51,7 @@ app.get('/', (req, res) => {
   res.send('Welcome to Movie Spot API');
 });
 
-//Route to documentation page
+
 app.get('/documentation', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/documentation.html'));
 });
@@ -167,6 +174,11 @@ app.post('/users',[
   app.get('/movies',passport.authenticate('jwt', { session: false}), async (req, res) => {
     await Movies.find()
     .then((movies) => {
+      const hash = crypto.createHash('md5').update(JSON.stringify(movies)).digest('hex')
+      res.setHeader('ETag', hash)
+      if (req.headers['if-none-match'] === hash) {
+        return res.status(304).end()
+      }
       res.status(201).json(movies);
     })
     .catch((err) => {
