@@ -313,12 +313,12 @@ app.get(
       }
 
       // Fetch the user's document from the database
-      const user = await User.findOne({ Username: req.params.Username }).exec();
+      const user = await Users.findOne({ Username: req.params.Username }).exec();
       if (!user) {
         return res.status(404).send('User not found');
       }
 
-      // Ensure favoriteMovies is an array
+      // Ensure FavoriteMovies is an array
       if (!Array.isArray(user.FavoriteMovies)) {
         return res.status(500).send('Invalid FavoriteMovies format');
       }
@@ -334,8 +334,10 @@ app.get(
       }).exec();
 
       // Extract movie details
-      const favoriteMovieDetails = favoriteMovies.map(movie => ({        
-        Title: movie.Title,       
+      const favoriteMovieDetails = favoriteMovies.map(movie => ({
+        
+        Title: movie.Title,
+        
       }));
 
       // Send the movie details as JSON
@@ -346,7 +348,6 @@ app.get(
     }
   }
 );
-
 //UPDATE: Add a movie to user's list of favorites
 app.patch(
   "/users/:Username/movies/:MovieID",
