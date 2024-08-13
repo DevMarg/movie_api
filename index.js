@@ -240,42 +240,31 @@ app.post('/users',[
 
   // READ: Get a list of user's favorite movies
   app.get('/users/:Username/movies/favorite-movies', passport.authenticate('jwt', { session: false }), async (req, res) => {
-    app.get('/users/:Username/movies/favorite-movies', passport.authenticate('jwt', { session: false }), async (req, res) => {
-      try {
-        if (req.user.Username !== req.params.Username) {
-          return res.status(403).send('Permission denied');
-        }
-    
-        const user = await Users.findOne({ Username: req.params.Username });
-        if (!user) {
-          return res.status(404).send('User not found');
-        }
-    
-        // Convert the IDs to ObjectId type
-        const favoriteMovieIds = user.favoriteMovies.map(id => {
-          try {
-            return mongoose.Types.ObjectId(id);
-          } catch (error) {
-            console.error('Error converting ID to ObjectId:', error);
-            return null;
-          }
-        }).filter(id => id !== null);
-    
-        console.log('Converted Favorite Movie IDs:', favoriteMovieIds);
-    
-        const favoriteMovies = await Movies.find({ _id: { $in: favoriteMovieIds } });
-    
-        if (favoriteMovies.length === 0) {
-          return res.status(404).send('No favorite movies found');
-        }
-    
-        res.json(favoriteMovies);
-      } catch (err) {
-        console.error('Error fetching favorite movies:', err);
-        res.status(500).send('Error: ' + err);
+    try {
+      if (req.user.Username !== req.params.Username) {
+        return res.status(403).send('Permission denied');
       }
-    });
-    
+  
+      const user = await Users.findOne({ Username: req.params.Username });
+      if (!user) {
+        return res.status(404).send('User not found');
+      }
+  
+      // Convert IDs to ObjectId
+      const favoriteMovieIds = user.favoriteMovies.map(id => mongoose.Types.ObjectId(id));
+  
+      const favoriteMovies = await Movies.find({ _id: { $in: favoriteMovieIds } });
+      
+      if (!favoriteMovies.length) {
+        return res.status(404).send('No favorite movies found');
+      }
+  
+      res.json(favoriteMovies);
+    } catch (err) {
+      console.error('Error fetching favorite movies:', err);
+      res.status(500).send('Error: ' + err);
+    }
+  });
   
   
   
