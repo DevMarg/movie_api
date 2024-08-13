@@ -201,7 +201,10 @@ app.post('/users',[
     check('Birthday', 'Birthday must be in DD/MM/YYYY format.').matches(/^\d{2}\/\d{2}\/\d{4}$/)
     ], passport.authenticate('jwt', { session: false }), async (req,res) => {
 
-    // Check the validation objects for errors
+      console.log('Request User:', req.user);
+      console.log('Requested Username:', req.params.Username);
+    
+      // Check the validation objects for errors
     let errors = validationResult(req);
     if (!errors.isEmpty()) {
     return res.status(422).json({ error: errors.array() });
