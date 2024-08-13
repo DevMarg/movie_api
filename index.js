@@ -302,43 +302,47 @@ app.put(
 );
 
 // READ: Get a list of user's favorite movies
-  app.get(
-  "/users/:Username/movies/favorite-movies",
-  passport.authenticate("jwt", { session: false }),
+app.get(
+  '/users/:Username/movies/favorite-movies',
+  passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     try {
       // Verify that the request is for the authenticated user
       if (req.user.Username !== req.params.Username) {
-        return res.status(403).send("Permission denied");
+        return res.status(403).send('Permission denied');
       }
 
-      // Fetch the user's favorite movie IDs
-      const user = await Users.findOne({ Username: req.params.Username });
+      // Fetch the user's document from the database
+      const user = await User.findOne({ Username: req.params.Username }).exec();
       if (!user) {
-        return res.status(404).send("User not found");
+        return res.status(404).send('User not found');
       }
 
-      // Fetch the details of the movies using the favorite movie IDs
-      const favoriteMovieIds = user.favoriteMovies.map((id) =>
+      // Ensure favoriteMovies is an array
+      if (!Array.isArray(user.FavoriteMovies)) {
+        return res.status(500).send('Invalid FavoriteMovies format');
+      }
+
+      // Convert IDs to ObjectId and fetch movie details
+      const favoriteMovieIds = user.FavoriteMovies.map(id =>
         mongoose.Types.ObjectId(id)
       );
 
       // Fetch the movies with the given IDs
-      const favoriteMovies = await Movies.find({
-        _id: { $in: favoriteMovieIds },
-      });
+      const favoriteMovies = await Movie.find({
+        _id: { $in: favoriteMovieIds }
+      }).exec();
 
-      // Extract movie titles
-      const favoriteMovieTitles = favoriteMovies.map((movie) => ({
-        _id: movie._id,
-        Title: movie.Title,
+      // Extract movie details
+      const favoriteMovieDetails = favoriteMovies.map(movie => ({        
+        Title: movie.Title,       
       }));
 
-      // Send the titles as JSON
-      res.json(favoriteMovieTitles);
+      // Send the movie details as JSON
+      res.json(favoriteMovieDetails);
     } catch (err) {
-      console.error("Error fetching favorite movies:", err);
-      res.status(500).send("Error: " + err);
+      console.error('Error fetching favorite movies:', err);
+      res.status(500).send('Error: ' + err.message);
     }
   }
 );
