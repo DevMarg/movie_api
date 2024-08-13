@@ -336,9 +336,8 @@ app.get(
 
       // Extract movie details
       const favoriteMovieDetails = favoriteMovies.map(movie => ({
-        
-        Title: movie.Title,
-        
+        id: movie._id,
+        Title: movie.Title,        
       }));
 
       // Send the movie details as JSON
