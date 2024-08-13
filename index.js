@@ -237,6 +237,31 @@ app.post('/users',[
         res.status(500).send('Error: ' + err);
       });
   })
+
+  // READ: Get a list of user's favorite movies
+app.get('/users/:Username/movies', passport.authenticate('jwt', { session: false }), async (req, res) => {
+  if (req.user.Username !== req.params.Username) {
+    return res.status(403).send('Permission denied');
+  }
+
+  try {
+    const user = await Users.findOne({ Username: req.params.Username });
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    // FavoriteMovies is an array of movie IDs
+    const favoriteMovies = user.FavoriteMovies;
+
+    // Fetch movie details for the list of favorite movie IDs
+    const movies = await Movies.find({ '_id': { $in: favoriteMovies } });
+
+    res.json(movies);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
+  }
+});
   
   //UPDATE: Add a movie to user's list of favorites
   app.patch('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { session: false }), async (req,res) => {
