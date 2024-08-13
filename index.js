@@ -239,28 +239,45 @@ app.post('/users',[
   })
 
   // READ: Get a list of user's favorite movies
-app.get('/users/:Username/movies/favorite-movies', passport.authenticate('jwt', { session: false }), async (req, res) => {
-  try {
-    // Verify that the request is for the authenticated user
-    if (req.user.Username !== req.params.Username) {
-      return res.status(403).send('Permission denied');
-    }
-
-    // Fetch the user's favorite movie IDs
-    const user = await Users.findOne({ Username: req.params.Username });
-    if (!user) {
-      return res.status(404).send('User not found');
-    }
-
-    // Fetch the details of the movies using the favorite movie IDs
-    const favoriteMovies = await Movies.find({ _id: { $in: user.favoriteMovies } });
+  app.get('/users/:Username/movies/favorite-movies', passport.authenticate('jwt', { session: false }), async (req, res) => {
+    app.get('/users/:Username/movies/favorite-movies', passport.authenticate('jwt', { session: false }), async (req, res) => {
+      try {
+        if (req.user.Username !== req.params.Username) {
+          return res.status(403).send('Permission denied');
+        }
     
-    res.json(favoriteMovies);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Error: ' + err);
-  }
-});
+        const user = await Users.findOne({ Username: req.params.Username });
+        if (!user) {
+          return res.status(404).send('User not found');
+        }
+    
+        // Convert the IDs to ObjectId type
+        const favoriteMovieIds = user.favoriteMovies.map(id => {
+          try {
+            return mongoose.Types.ObjectId(id);
+          } catch (error) {
+            console.error('Error converting ID to ObjectId:', error);
+            return null;
+          }
+        }).filter(id => id !== null);
+    
+        console.log('Converted Favorite Movie IDs:', favoriteMovieIds);
+    
+        const favoriteMovies = await Movies.find({ _id: { $in: favoriteMovieIds } });
+    
+        if (favoriteMovies.length === 0) {
+          return res.status(404).send('No favorite movies found');
+        }
+    
+        res.json(favoriteMovies);
+      } catch (err) {
+        console.error('Error fetching favorite movies:', err);
+        res.status(500).send('Error: ' + err);
+      }
+    });
+    
+  
+  
   
   //UPDATE: Add a movie to user's list of favorites
   app.patch('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { session: false }), async (req,res) => {
