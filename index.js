@@ -323,16 +323,13 @@ app.get(
         return res.status(500).send('Invalid FavoriteMovies format');
       }
 
-      // Import ObjectId from mongoose
-      const ObjectId = mongoose.Types.ObjectId;
-
       // Convert IDs to ObjectId
-      const favoriteMovieIds = user.FavoriteMovies.map(id => 
-        mongoose.Types.ObjectId(id) // Create ObjectId from the string ID
+      const favoriteMovieIds = user.FavoriteMovies.map(id =>
+        mongoose.Types.ObjectId(id) 
       );
 
       // Fetch the movies with the given IDs
-      const favoriteMovies = await Movie.find({
+      const favoriteMovies = await Movies.find({
         _id: { $in: favoriteMovieIds }
       }).exec();
 
