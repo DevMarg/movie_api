@@ -239,24 +239,23 @@ app.post('/users',[
   })
 
   // READ: Get a list of user's favorite movies
-app.get('/users/:Username/movies', passport.authenticate('jwt', { session: false }), async (req, res) => {
-  if (req.user.Username !== req.params.Username) {
-    return res.status(403).send('Permission denied');
-  }
-
+app.get('/users/:Username/movies/favorite-movies', passport.authenticate('jwt', { session: false }), async (req, res) => {
   try {
+    // Verify that the request is for the authenticated user
+    if (req.user.Username !== req.params.Username) {
+      return res.status(403).send('Permission denied');
+    }
+
+    // Fetch the user's favorite movie IDs
     const user = await Users.findOne({ Username: req.params.Username });
     if (!user) {
       return res.status(404).send('User not found');
     }
 
-    // FavoriteMovies is an array of movie IDs
-    const favoriteMovies = user.FavoriteMovies;
-
-    // Fetch movie details for the list of favorite movie IDs
-    const movies = await Movies.find({ '_id': { $in: favoriteMovies } });
-
-    res.json(movies);
+    // Fetch the details of the movies using the favorite movie IDs
+    const favoriteMovies = await Movies.find({ _id: { $in: user.favoriteMovies } });
+    
+    res.json(favoriteMovies);
   } catch (err) {
     console.error(err);
     res.status(500).send('Error: ' + err);
