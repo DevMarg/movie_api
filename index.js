@@ -323,9 +323,9 @@ app.get(
         return res.status(500).send('Invalid FavoriteMovies format');
       }
 
-      // Convert IDs to ObjectId and fetch movie details
-      const favoriteMovieIds = user.FavoriteMovies.map(id =>
-        mongoose.Types.ObjectId(id)
+      // Convert IDs to ObjectId
+      const favoriteMovieIds = user.FavoriteMovies.map(id => 
+        mongoose.Types.ObjectId(id) // Create ObjectId from the string ID
       );
 
       // Fetch the movies with the given IDs
@@ -348,6 +348,8 @@ app.get(
     }
   }
 );
+
+     
 //UPDATE: Add a movie to user's list of favorites
 app.patch(
   "/users/:Username/movies/:MovieID",
