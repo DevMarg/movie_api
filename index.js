@@ -358,20 +358,30 @@ app.patch(
     if (req.user.Username !== req.params.Username) {
       return res.status(400).send("Permission denied");
     }
-    await Users.findOneAndUpdate(
-      { Username: req.params.Username },
-      {
-        $push: { FavoriteMovies: req.params.MovieID },
-      },
-      { new: true }
-    )
-      .then((updatedUser) => {
-        res.json(updatedUser);
-      })
-      .catch((err) => {
-        console.error(err);
-        res.status(500).send("Error: " + err);
-      });
+    try {
+      // Find the user by their username
+      const user = await Users.findOne({ Username: req.params.Username });
+
+      if (!user) {
+        return res.status(404).send("User not found");
+      }
+
+      // Check if the movie ID is already in the favorite movies
+      if (user.FavoriteMovies.includes(req.params.MovieID)) {
+        return res.status(400).send("Movie already in favorites");
+      }
+
+      // Add the movie ID to the favorite movies array
+      user.FavoriteMovies.push(req.params.MovieID);
+      
+      // Save the updated user
+      const updatedUser = await user.save();
+      
+      res.json(updatedUser);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("Error: " + err);
+    }
   }
 );
 
