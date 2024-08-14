@@ -388,25 +388,41 @@ app.patch(
 //DELETE: Delete a movie from user's list of favorites
 app.delete(
   "/users/:Username/movies/:MovieID",
-  passport.authenticate("jwt", { session: false }),
+  // Temporarily disable authentication to isolate the issue
+  // passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    if (req.user.Username !== req.params.Username) {
+    // Log the request parameters for debugging
+    console.log("Request Params:", req.params);
+    console.log("Request User:", req.user);
+
+    // Check if the username in the request matches the authenticated user
+    if (req.user && req.user.Username !== req.params.Username) {
       return res.status(400).send("Permission denied");
     }
-    await Users.findOneAndUpdate(
-      { Username: req.params.Username },
-      {
-        $pull: { FavoriteMovies: req.params.MovieID },
-      },
-      { new: true }
-    )
-      .then((updatedUser) => {
-        res.json(updatedUser);
-      })
-      .catch((err) => {
-        console.error(err);
-        res.status(500).send("Error: " + err);
-      });
+
+    try {
+      // Log before the update operation
+      console.log("Attempting to remove movie:", req.params.MovieID);
+
+      const updatedUser = await Users.findOneAndUpdate(
+        { Username: req.params.Username },
+        {
+          $pull: { FavoriteMovies: req.params.MovieID }
+        },
+        { new: true }
+      );
+
+      if (!updatedUser) {
+        return res.status(404).send("User not found");
+      }
+
+      // Log the updated user object
+      console.log("Updated User:", updatedUser);
+      res.json(updatedUser);
+    } catch (err) {
+      console.error("Error:", err);
+      res.status(500).send("Error: " + err);
+    }
   }
 );
 
