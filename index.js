@@ -43,6 +43,7 @@ let allowedOrigins = [
   "http://testsite.com",
   "http://localhost:1234",
   "http://localhost:64730",
+  "https://movie-spot-c4ff17.netlify.app"
 ];
 
 app.use(
