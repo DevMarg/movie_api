@@ -247,26 +247,26 @@ app.get(
 //UPDATE: Update user's info by username
 app.put(
   "/users/:Username",
-  [
-    // Validation logic for request
-    check("Username", "Username must be at least 5 characters long.").isLength({
-      min: 5,
-    }),
-    check(
-      "Username",
-      "Username should only contain letters and numbers."
-    ).isAlphanumeric(),
-    check("Password", "Password is required.").not().isEmpty(),
-    check("Password", "Password must be at least 8 characters long.").isLength({
-      min: 8,
-    }),
-    check("Email", "Email is required").not().isEmpty(),
-    check("Email", "Please enter a valid email address.").isEmail(),
-    check("Birthday", "Birthday date is required").not().isEmpty(),
-    check("Birthday", "Birthday must be in DD/MM/YYYY format.").matches(
-      /^\d{2}\/\d{2}\/\d{4}$/
-    ),
-  ],
+  // [
+  //   // Validation logic for request
+  //   check("Username", "Username must be at least 5 characters long.").isLength({
+  //     min: 5,
+  //   }),
+  //   check(
+  //     "Username",
+  //     "Username should only contain letters and numbers."
+  //   ).isAlphanumeric(),
+  //   check("Password", "Password is required.").not().isEmpty(),
+  //   check("Password", "Password must be at least 8 characters long.").isLength({
+  //     min: 8,
+  //   }),
+  //   check("Email", "Email is required").not().isEmpty(),
+  //   check("Email", "Please enter a valid email address.").isEmail(),
+  //   check("Birthday", "Birthday date is required").not().isEmpty(),
+  //   check("Birthday", "Birthday must be in DD/MM/YYYY format.").matches(
+  //     /^\d{2}\/\d{2}\/\d{4}$/
+  //   ),
+  // ],
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     console.log("Request User:", req.user);
