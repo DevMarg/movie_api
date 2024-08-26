@@ -256,10 +256,10 @@ app.put(
       "Username",
       "Username should only contain letters and numbers."
     ).isAlphanumeric(),
-    check("Password", "Password is required.").not().isEmpty(),
-    check("Password", "Password must be at least 8 characters long.").isLength({
-      min: 8,
-    }),
+    // check("Password", "Password is required.").not().isEmpty(),
+    // check("Password", "Password must be at least 8 characters long.").isLength({
+    //   min: 8,
+    // }),
     check("Email", "Email is required").not().isEmpty(),
     check("Email", "Please enter a valid email address.").isEmail(),
     check("Birthday", "Birthday date is required").not().isEmpty(),
