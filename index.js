@@ -118,7 +118,7 @@ app.post(
         if (user) {
           return res
             .status(400)
-            .json({ error: [{ msg: "Username already exists" }] });
+            .json({ error: [{ msg: "User already exists" }] });
         } else {
           Users.create({
             Username: req.body.Username,
