@@ -43,7 +43,7 @@ let allowedOrigins = [
   "http://testsite.com",
   "http://localhost:1234",
   "http://localhost:64730",
-  "https://movie-spot-c4ff17.netlify.app"
+  "https://movie-spot-c4ff17.netlify.app",
 ];
 
 app.use(
@@ -71,7 +71,7 @@ app.get("/documentation", (req, res) => {
   res.sendFile(path.join(__dirname, "public/documentation.html"));
 });
 
-//CREATE: Create new user
+// CREATE: Create new user
 app.post(
   "/users",
   [
@@ -116,7 +116,9 @@ app.post(
     await Users.findOne({ Username: req.body.Username })
       .then((user) => {
         if (user) {
-          return res.status(400).send(req.body.Username + "already exists");
+          return res
+            .status(400)
+            .json({ error: [{ msg: "Username already exists" }] });
         } else {
           Users.create({
             Username: req.body.Username,
@@ -129,13 +131,17 @@ app.post(
             })
             .catch((error) => {
               console.error(error);
-              res.status(500).send("Error: " + error);
+              res
+                .status(500)
+                .json({ error: [{ msg: "Server error: " + error.message }] });
             });
         }
       })
       .catch((error) => {
         console.error(error);
-        res.status(500).send("Error: " + error);
+        res
+          .status(500)
+          .json({ error: [{ msg: "Server error: " + error.message }] });
       });
   }
 );
@@ -304,53 +310,54 @@ app.put(
 
 // READ: Get a list of user's favorite movies
 app.get(
-  '/users/:Username/movies/favorite-movies',
-  passport.authenticate('jwt', { session: false }),
+  "/users/:Username/movies/favorite-movies",
+  passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
       // Verify that the request is for the authenticated user
       if (req.user.Username !== req.params.Username) {
-        return res.status(403).send('Permission denied');
+        return res.status(403).send("Permission denied");
       }
 
       // Fetch the user's document from the database
-      const user = await Users.findOne({ Username: req.params.Username }).exec();
+      const user = await Users.findOne({
+        Username: req.params.Username,
+      }).exec();
       if (!user) {
-        return res.status(404).send('User not found');
+        return res.status(404).send("User not found");
       }
 
       // Ensure FavoriteMovies is an array
       if (!Array.isArray(user.FavoriteMovies)) {
-        return res.status(500).send('Invalid FavoriteMovies format');
+        return res.status(500).send("Invalid FavoriteMovies format");
       }
 
       // Convert IDs to ObjectId with 'new'
       const ObjectId = mongoose.Types.ObjectId;
-      const favoriteMovieIds = user.FavoriteMovies.map(id =>
-        new ObjectId(id) // Convert each ID to an ObjectId using 'new'
+      const favoriteMovieIds = user.FavoriteMovies.map(
+        (id) => new ObjectId(id) // Convert each ID to an ObjectId using 'new'
       );
 
       // Fetch the movies with the given IDs
       const favoriteMovies = await Movies.find({
-        _id: { $in: favoriteMovieIds }
+        _id: { $in: favoriteMovieIds },
       }).exec();
 
       // Extract movie details
-      const favoriteMovieDetails = favoriteMovies.map(movie => ({
+      const favoriteMovieDetails = favoriteMovies.map((movie) => ({
         id: movie._id,
-        Title: movie.Title,        
+        Title: movie.Title,
       }));
 
       // Send the movie details as JSON
       res.json(favoriteMovieDetails);
     } catch (err) {
-      console.error('Error fetching favorite movies:', err);
-      res.status(500).send('Error: ' + err.message);
+      console.error("Error fetching favorite movies:", err);
+      res.status(500).send("Error: " + err.message);
     }
   }
 );
 
-     
 //UPDATE: Add a movie to user's list of favorites
 app.patch(
   "/users/:Username/movies/:MovieID",
@@ -374,10 +381,10 @@ app.patch(
 
       // Add the movie ID to the favorite movies array
       user.FavoriteMovies.push(req.params.MovieID);
-      
+
       // Save the updated user
       const updatedUser = await user.save();
-      
+
       res.json(updatedUser);
     } catch (err) {
       console.error(err);
@@ -409,7 +416,7 @@ app.delete(
       const updatedUser = await Users.findOneAndUpdate(
         { Username: req.params.Username },
         {
-          $pull: { FavoriteMovies: req.params.MovieID }
+          $pull: { FavoriteMovies: req.params.MovieID },
         },
         { new: true } // Return the updated document
       );
@@ -429,7 +436,6 @@ app.delete(
     }
   }
 );
-
 
 //DELETE: Delete user by username
 app.delete(
